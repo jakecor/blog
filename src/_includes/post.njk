@@ -5,8 +5,15 @@ layout: base.njk
   Post layout: wraps an individual blog post's rendered Markdown with
   its title and date. Chains to base.njk (via the frontmatter above)
   for the shared header/nav/footer. Posts set `layout: post.njk`.
+
+  Optional frontmatter:
+    image:    path to a hero image, e.g. /images/my-post/cover.jpg
+    imageAlt: alt text for the hero image (falls back to the post title)
 -->
 <article>
+  {% if image %}
+  <img class="post-hero" src="{{ image }}" alt="{{ imageAlt or title }}">
+  {% endif %}
   <h1>{{ title }}</h1>
   <p class="post-meta">{{ date | readableDate }}</p>
   {{ content | safe }}

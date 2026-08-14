@@ -3,8 +3,9 @@
 // through untouched (e.g. CSS), and defines the "posts" collection
 // used by src/index.njk to list and link to blog posts.
 module.exports = function (eleventyConfig) {
-  // Copy the CSS folder as-is into the output site (no processing needed).
+  // Copy static assets as-is into the output site (no processing needed).
   eleventyConfig.addPassthroughCopy("src/css");
+  eleventyConfig.addPassthroughCopy("src/images");
 
   // "posts" collection: every Markdown file under src/posts/, newest first.
   // Powers the post listing on the homepage and any future pagination.
