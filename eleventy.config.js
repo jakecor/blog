@@ -23,6 +23,11 @@ module.exports = function (eleventyConfig) {
     });
   });
 
+  // Machine-readable ISO date for <time datetime="..."> attributes.
+  eleventyConfig.addFilter("isoDate", function (dateObj) {
+    return new Date(dateObj).toISOString().split("T")[0];
+  });
+
   return {
     dir: {
       input: "src",
