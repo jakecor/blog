@@ -1,14 +1,30 @@
 /*
-  Minimal base styling — plain HTML5 structure, kept intentionally
-  simple for now. Refine visual design once the site structure is
-  confirmed (see blog-project-brief.md).
+  Base styling — minimal and lightweight by design: system font
+  stacks only (no web font downloads), no JS, no build step beyond
+  Eleventy itself. Light/dark palettes are both defined as custom
+  properties so prefers-color-scheme just swaps values, no separate
+  dark-mode rules to maintain.
 */
 
 :root {
+  --bg-color: #fdfdfc;
   --text-color: #1a1a1a;
   --muted-color: #666;
   --link-color: #1a56db;
+  --border-color: #e5e5e5;
   --max-width: 42rem;
+  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #17181a;
+    --text-color: #e8e6e3;
+    --muted-color: #999;
+    --link-color: #7aa2f7;
+    --border-color: #333;
+  }
 }
 
 * {
@@ -17,9 +33,16 @@
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg-color);
   color: var(--text-color);
-  line-height: 1.6;
+  font-family: var(--sans);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  line-height: 1.25;
 }
 
 .site-header,
@@ -27,34 +50,42 @@ main,
 .site-footer {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 1.5rem 1rem;
+  padding: 1.75rem 1.25rem;
 }
 
 .site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .site-title {
+  font-family: var(--serif);
+  font-size: 1.25rem;
   font-weight: 700;
   text-decoration: none;
   color: var(--text-color);
 }
 
 .site-header nav a {
-  margin-left: 1rem;
-  color: var(--link-color);
+  margin-left: 1.25rem;
+  color: var(--muted-color);
   text-decoration: none;
+  font-size: 0.95rem;
 }
 
 .site-header nav a:hover {
-  text-decoration: underline;
+  color: var(--link-color);
 }
 
 a {
   color: var(--link-color);
+}
+
+main {
+  padding-top: 2.5rem;
+  padding-bottom: 3rem;
 }
 
 .post-list {
@@ -63,13 +94,59 @@ a {
 }
 
 .post-list li {
-  margin-bottom: 1.25rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding-bottom: 1.75rem;
+  margin-bottom: 1.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.post-list li:last-child {
+  border-bottom: none;
+}
+
+.post-thumb {
+  width: 6rem;
+  height: 6rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
+  flex-shrink: 0;
+}
+
+.post-list h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.post-list h2 a {
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.post-list h2 a:hover {
+  color: var(--link-color);
 }
 
 .post-list time {
   display: block;
   color: var(--muted-color);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+
+.post-excerpt {
+  margin: 0;
+  color: var(--muted-color);
+  font-size: 0.95rem;
+}
+
+.post-hero {
+  width: 100%;
+  max-height: 22rem;
+  object-fit: cover;
+  border-radius: 0.375rem;
+  margin-bottom: 1.5rem;
 }
 
 .post-meta {
@@ -78,8 +155,17 @@ a {
   margin-top: -0.75rem;
 }
 
+article h1 {
+  margin-bottom: 0.25rem;
+}
+
+article img {
+  max-width: 100%;
+  border-radius: 0.375rem;
+}
+
 .site-footer {
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--border-color);
   color: var(--muted-color);
   font-size: 0.9rem;
 }
