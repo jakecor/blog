@@ -29,6 +29,15 @@ module.exports = function (eleventyConfig) {
     return new Date(dateObj).toISOString().split("T")[0];
   });
 
+  // Plain-text excerpt for the homepage listing: strips rendered HTML
+  // and truncates to a word boundary. Posts can override with a
+  // frontmatter `excerpt` field instead of relying on auto-truncation.
+  eleventyConfig.addFilter("excerpt", function (content) {
+    const text = String(content).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    if (text.length <= 160) return text;
+    return text.slice(0, 160).replace(/\s+\S*$/, "") + "…";
+  });
+
   return {
     dir: {
       input: "src",
