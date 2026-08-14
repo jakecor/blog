@@ -1,0 +1,31 @@
+<!--
+  Base site layout. Every page/post sets `layout: base.njk` in its
+  frontmatter and Eleventy wraps its rendered content in this shell.
+  Keeps header/nav/footer in one place instead of repeated per page.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | Jacob Corcoran</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-title" href="/">Jacob Corcoran</a>
+    <nav>
+      <a href="/">Posts</a>
+      <a href="/about/">About</a>
+    </nav>
+  </header>
+
+  <main>
+    {{ content | safe }}
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; {{ currentYear }} Jacob Corcoran</p>
+  </footer>
+</body>
+</html>
