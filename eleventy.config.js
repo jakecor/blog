@@ -7,12 +7,22 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/images");
 
-  // "posts" collection: every Markdown file under src/posts/, newest first.
-  // Powers the post listing on the homepage and any future pagination.
+  // "posts" collection: every non-draft Markdown file under src/posts/,
+  // newest first. Powers the post listing on the homepage and any future
+  // pagination.
   eleventyConfig.addCollection("posts", function (collectionApi) {
-    return collectionApi.getFilteredByGlob("src/posts/*.md").sort((a, b) => {
-      return b.date - a.date;
-    });
+    return collectionApi
+      .getFilteredByGlob("src/posts/*.md")
+      .filter((post) => !post.data.draft)
+      .sort((a, b) => b.date - a.date);
+  });
+
+  // `draft: true` in a post's frontmatter keeps it out of collections and
+  // stops Eleventy writing an output file for it at all, so the content
+  // lives in the repo without going live.
+  eleventyConfig.addGlobalData("eleventyComputed", {
+    eleventyExcludeFromCollections: (data) => data.draft === true,
+    permalink: (data) => (data.draft ? false : data.permalink),
   });
 
   // Human-readable date filter, e.g. {{ post.date | readableDate }} -> "May 15, 2016"
