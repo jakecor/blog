@@ -88,6 +88,11 @@ main {
   padding-bottom: 3rem;
 }
 
+.bio {
+  color: var(--muted-color);
+  margin-bottom: 2rem;
+}
+
 .post-list {
   list-style: none;
   padding: 0;
@@ -168,4 +173,13 @@ article img {
   border-top: 1px solid var(--border-color);
   color: var(--muted-color);
   font-size: 0.9rem;
+}
+
+.social-links a {
+  margin-right: 1rem;
+  color: var(--muted-color);
+}
+
+.social-links a:hover {
+  color: var(--link-color);
 }

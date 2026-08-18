@@ -2,7 +2,9 @@
 layout: base.njk
 title: Posts
 ---
-<!-- Homepage: lists every post in the "posts" collection, newest first. -->
+<!-- Homepage: short bio, then every post in the "posts" collection, newest first. -->
+<p class="bio">Hello, I'm Jake! For nearly two decades I've helped businesses with digital transformation and marketing strategy implementation. I want to help you create great experiences for your customers that help meet your financial goals.</p>
+
 <ul class="post-list">
   {% for post in collections.posts %}
   <li>
