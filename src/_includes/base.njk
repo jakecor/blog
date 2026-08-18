@@ -9,14 +9,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }} | Jacob Corcoran</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="{{ '/css/style.css' | url }}">
 </head>
 <body>
   <header class="site-header">
-    <a class="site-title" href="/">Jacob Corcoran</a>
+    <a class="site-title" href="{{ '/' | url }}">Jacob Corcoran</a>
     <nav>
-      <a href="/">Posts</a>
-      <a href="/about/">About</a>
+      <a href="{{ '/' | url }}">Posts</a>
+      <a href="{{ '/about/' | url }}">About</a>
     </nav>
   </header>
 
