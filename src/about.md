@@ -3,24 +3,16 @@ title: About
 layout: base.njk
 permalink: /about/
 ---
-<!-- Draft migrated from jacobcorcoran.com/about/. Content flagged by
-     the site owner as needing an update — treat as placeholder. -->
-
 # About
 
-Hello! I'm Jake, a writer, marketing consultant, and aspiring skydiver with over 7 years in the marketing field.
+Hi there!
 
-## Professional Background
+I’m a writer, marketing consultant and novice skydiver. Forget the alarmingly formal domain name; you can call me Jake.
 
-My experience includes co-founding two thriving online ventures and collaborating with diverse clients—from independent medical professionals and artisans to large-scale outdoor furniture retailers and an Australian university recognized among Times Higher Education's "top 100 under 50" institutions. My most recent role involved leading digital marketing strategy for Australia's premier mail-order collectibles company.
+I have over 7 years experience in marketing, including co-founding two successful online businesses, helping clients ranging from doctors and local pottery businesses to 7-figure outdoor furniture concerns and an Australian University ranked in the Times Higher Education’s “top 100 under 50”. Most recently I’ve been employed by Australia’s largest mail-order collectables business to spearhead their online marketing efforts.
 
-## Core Competencies
+I have experience in direct sales, direct response (print), direct response (online), customer service, campaign strategy and planning.
 
-- Direct sales and customer service
-- Print and digital direct response marketing
-- Campaign strategy and planning
-- Sales funnel optimization
+If you want to contact me regarding copy reviews, sales funnel design, or if your organisation needs someone to tell them what’s what with this new-fangled internet marketing stuff, I’m your guy. I’ll tell you immediately if I can’t help you myself and I can usually point you in the right direction regardless.
 
-## Services Offered
-
-I assist with copywriting reviews, sales funnel development, and strategic internet marketing guidance. I provide honest assessments of whether I can help—and if not, I typically can recommend appropriate alternatives.
+Simply visit the [contact](https://jacobcorcoran.com/contact/) page and fill in the form!
