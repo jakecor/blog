@@ -40,10 +40,18 @@ module.exports = function (eleventyConfig) {
   });
 
   // Plain-text excerpt for the homepage listing: strips rendered HTML
-  // and truncates to a word boundary. Posts can override with a
-  // frontmatter `excerpt` field instead of relying on auto-truncation.
+  // and truncates to a word boundary. A period is inserted at each
+  // paragraph break before stripping tags, so joining paragraphs doesn't
+  // glue two sentences together with no punctuation between them. Posts
+  // can override with a frontmatter `excerpt` field instead of relying
+  // on auto-truncation.
   eleventyConfig.addFilter("excerpt", function (content) {
-    const text = String(content).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const withBreaks = String(content).replace(/<\/(p|h[1-6]|li|blockquote)>/gi, ".$&");
+    const text = withBreaks
+      .replace(/<[^>]+>/g, " ")
+      .replace(/([.?!])[.?!]+/g, "$1")
+      .replace(/\s+/g, " ")
+      .trim();
     if (text.length <= 160) return text;
     return text.slice(0, 160).replace(/\s+\S*$/, "") + "…";
   });

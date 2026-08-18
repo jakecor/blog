@@ -7,8 +7,6 @@ Note: This was published on another website that is now defunct, so I’m puttin
 
 The way business is conducted in almost every market has changed fundamentally, and on a global scale, in just the past few years. Jobs – and profits – are lost to competitors overseas, entire industries have been disrupted and the economy is crumbling around our ears. The business world has gone digital, and those that haven’t moved with it are just gone, period.
 
-*Note: This was published on another website that is now defunct, so I’m putting it up here. I’ve left the original opening intact, which suited the original audience but is not to my current taste.*
-
 But it’s not all doom and gloom – those that will survive and thrive in this changed and changing environment will do so, ironically, by embracing some of the oldest, most fundamental business practices. The tools have changed, but the principles remain the same.
 
 A sound marketing strategy, a systematic process for converting visitors to customers and a reliable way to continue marketing to your best clients are the base of any successful business. Here are the three top strategies to make that happen, today:
