@@ -7,12 +7,19 @@ permalink: /about/
 
 Hi there!
 
-I’m a writer, marketing consultant and novice skydiver. Forget the alarmingly formal domain name; you can call me Jake.
+I’m an enterprise leader and consultant with a focus on marketing & growth. I'm also a husband, father of two beautiful children, and - despite the alarmingly formal domain name - generally go by Jake.
 
-I have over 7 years experience in marketing, including co-founding two successful online businesses, helping clients ranging from doctors and local pottery businesses to 7-figure outdoor furniture concerns and an Australian University ranked in the Times Higher Education’s “top 100 under 50”. Most recently I’ve been employed by Australia’s largest mail-order collectables business to spearhead their online marketing efforts.
+I have nearly two decades of experience in digital marketing, new team & process development, project management, digital transformation, strategy and large-scale technology procurement & implementation. Some of my key roles have included:
 
-I have experience in direct sales, direct response (print), direct response (online), customer service, campaign strategy and planning.
+1. Co-founding two successful online businesses - helping clients ranging from doctors and local pottery businesses to 7-figure outdoor furniture concerns and a major Australian University.
 
-If you want to contact me regarding copy reviews, sales funnel design, or if your organisation needs someone to tell them what’s what with this new-fangled internet marketing stuff, I’m your guy. I’ll tell you immediately if I can’t help you myself and I can usually point you in the right direction regardless.
+2. Leading the digital function for Australia’s largest mail-order collectables business - I rebuilt their digital team and spearheaded their online marketing efforts, leading to growth from 1.4 to 5 million dollars annually, including approximately 2 million in new subscription revenue. 
 
-Simply visit the [contact](https://jacobcorcoran.com/contact/) page and fill in the form!
+3. Managing the digital marketing function for the third largest cemeteries trust in Australia - I was the Digital Marketing (then Marketing Operations) Manager where I was a Product Owner for a major CRM/ERP/marketing platform upgrade, project manager for multiple major digital projects and built the digital marketing team responsible for comprehensive channel management with annual physical location visitation of more than 2 million and website visits north of a million.
+
+If you're interested in working with me, simply [reach out](https://www.linkedin.com/in/jakecorcoran/) to me on linkedin and mention my website in your intro message (so I know you're a real human)!
+
+I’ll tell you immediately if I can’t help you myself and I can usually point you in the right direction regardless.
+
+Cheers,
+Jake
