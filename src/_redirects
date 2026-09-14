@@ -1,0 +1,73 @@
+# Cloudflare Pages redirect rules. Copied verbatim into the site root at build
+# time (see eleventy.config.js) and read by Pages itself — this file does
+# nothing locally and nothing on the GitHub Pages mirror.
+#
+# Why: the old WordPress site at this domain used flat, post-name permalinks
+# (/start-with-your-audience/). The Eleventy site nests posts under /posts/,
+# so every inbound link and search result pointing at an old URL 404s without
+# these. Source URLs were recovered from the Internet Archive's CDX index for
+# jacobcorcoran.com and confirmed to have returned 200 on the old site.
+#
+# Format: <from> <to> <status>. First match wins, so specific rules must come
+# before wildcards. Free-tier Pages allows 2,000 static + 100 dynamic rules;
+# this file uses well under that.
+
+# --- Posts that exist on both sites -----------------------------------------
+/10-minutes-is-all-it-takes/  /posts/10-minutes-is-all-it-takes/  301
+/start-with-your-audience/  /posts/start-with-your-audience/  301
+/the-top-3-strategies-for-your-business-to-survive-and-thrive-in-the-new-digital-economy/  /posts/top-3-strategies-digital-economy/  301
+
+# --- Old per-post comment feeds and the site feed ---------------------------
+/10-minutes-is-all-it-takes/feed/  /feed.xml  301
+/start-with-your-audience/feed/  /feed.xml  301
+/the-top-3-strategies-for-your-business-to-survive-and-thrive-in-the-new-digital-economy/feed/  /feed.xml  301
+/feed/  /feed.xml  301
+/comments/feed/  /feed.xml  301
+
+# --- Pages with a direct equivalent -----------------------------------------
+# /about-2/ was the real about page; /about/ on the old site 404'd by the end.
+/about-2/  /about/  301
+# No contact page on the new site. The about page carries the "reach out"
+# LinkedIn link, which is the closest thing to the old contact form.
+/contact/  /about/  301
+# /presentations/ listed speaking topics and has no new equivalent yet.
+# Retarget this if that page is ever rebuilt.
+/presentations/  /about/  301
+
+# --- Old sitemaps -----------------------------------------------------------
+/sitemap.html  /sitemap.xml  301
+/sitemap-misc.html  /sitemap.xml  301
+/sitemap-pt-*  /sitemap.xml  301
+
+# --- Lead-magnet funnel, now retired ----------------------------------------
+# /beat-writers-block/ was an email-capture page for a writer's-block guide;
+# /ty/* were its thank-you pages; /lulu/ was password-protected.
+/beat-writers-block/  /  301
+/ty  /  301
+/ty/*  /  301
+/lulu/  /  301
+
+# --- Genesis/Atmosphere theme demo pages that were never real content -------
+/columns/  /  301
+/typography/  /  301
+/content-sidebar/  /  301
+/sidebar-content/  /  301
+/full-width/  /  301
+/landing/  /  301
+
+# --- A post that was not migrated -------------------------------------------
+# "What My Name Means For My Future" — an old just-for-fun post. Sent home
+# rather than restored; point this at a real URL if it is ever brought across.
+/name-future  /  301
+
+# --- Archive, category and pagination listings ------------------------------
+/articles/  /  301
+/archive/  /  301
+/category/*  /  301
+/author/*  /  301
+/page/*  /  301
+/articles/page/*  /  301
+/2014/*  /  301
+/2015/*  /  301
+/2016/*  /  301
+/2017/*  /  301

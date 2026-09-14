@@ -35,16 +35,29 @@ There are **two** deploy paths in this repo. Only one of them matters.
   the same Pages project, with **no redirect between them**. Apex is treated as
   canonical everywhere in the templates.
 
-### The legacy one: GitHub Pages
+### The old one: GitHub Pages (removed 2026-09-15)
 
-- `.github/workflows/deploy.yml` still builds on every push to `main` and
-  deploys to `https://jakecor.github.io/blog/` with `--pathprefix=/blog/`.
-- This is a **dead mirror**. Nothing points at it. It is queued for removal in
-  BACKLOG.md. Do not treat it as the deploy target, and do not "fix" the site to
-  suit it.
-- The `--pathprefix` flag exists only for that mirror. This is why templates use
-  the `| url` filter for internal links (prefix-aware) but build canonical/OG
-  URLs from `site.url` directly (always the real domain).
+`.github/workflows/deploy.yml` used to build on every push and deploy a mirror
+to `https://jakecor.github.io/blog/` with `--pathprefix=/blog/`. Nothing pointed
+at it, it burned CI minutes on every push, and having two "live" sites was the
+single biggest source of confusion across sessions. **It is gone.** There is now
+exactly one deploy path: Cloudflare Pages.
+
+Consequences worth knowing:
+- `--pathprefix` is no longer used by anything. Internal links still go through
+  the `| url` filter, which is correct and costs nothing, but there is no longer
+  a build that renders at a non-root path.
+- `jakecor.github.io/blog/` will serve stale content until GitHub Pages is
+  turned off for the repo in its settings, or the `gh-pages` deployment is
+  removed. Worth doing — it still carries a canonical pointing at
+  jacobcorcoran.com, so it is not an SEO problem, just a stale copy.
+
+### Redirects
+
+`src/_redirects` is copied to the site root and read by Cloudflare Pages. It maps
+the old WordPress permalinks (flat `/post-name/`) onto the new `/posts/post-name/`
+structure, plus category/archive/theme-demo pages. It does nothing locally — to
+test a rule you have to push and check the live site.
 
 ### Publishing
 
@@ -85,6 +98,7 @@ src/
   posts/*.md           the posts collection
   css/style.css        all styling, light + dark via prefers-color-scheme
   favicon.svg          JC monogram
+  _redirects           301 map for old WordPress URLs (Cloudflare Pages only)
 eleventy.config.js     collection, draft handling, date/excerpt filters
 _site/                 build output — gitignored, never edit
 ```

@@ -47,11 +47,56 @@ All verified against a real `npm run build` and the resulting `_site/` output.
 
 ## DNS / domain
 
-- **Move domain registration for jacobcorcoran.com to Cloudflare** — DNS is already managed there; the registrar (still Dreamhost) hasn't moved yet.
-- **Redirect www → apex (or vice versa)** — `jacobcorcoran.com` and `www.jacobcorcoran.com` are both live, independent CNAMEs to the same Pages project with no redirect between them. Pick one as canonical and redirect the other (Cloudflare bulk redirect rule).
-- **Add a DMARC record** — Cloudflare's dashboard flags this as a suggestion for the Email Routing setup; not added yet.
-- **Remove the now-redundant GitHub Pages deploy workflow** — `.github/workflows/deploy.yml` still builds and deploys to `jakecor.github.io/blog/` on every push, but Cloudflare Pages (connected via GitHub App) is the real, current deployment. The GH Pages copy is a dead legacy mirror at this point.
-- **301 redirect mapping for old URLs** — the old site's post slugs don't all match the new ones (e.g. `the-top-3-strategies-for-...` vs `top-3-strategies-digital-economy`). Any inbound links/search rankings to the old URLs would 404 without redirects.
+- **Add a DMARC record** — **needs doing by hand in the Cloudflare dashboard;
+  Claude has no Cloudflare credentials on this machine.** Email Routing is
+  otherwise complete (MX + SPF `v=spf1 include:_spf.mx.cloudflare.net ~all` are
+  both live), so this is the last missing piece and stops anyone spoofing the
+  domain. Add a TXT record:
+
+  | Field | Value |
+  | --- | --- |
+  | Type | `TXT` |
+  | Name | `_dmarc` |
+  | Content | `v=DMARC1; p=none; rua=mailto:hello@jacobcorcoran.com; fo=1` |
+
+  Start at `p=none` (monitor only, nothing gets rejected). Once the reports show
+  only legitimate mail, tighten to `p=quarantine` and later `p=reject`.
+
+- **Move domain registration for jacobcorcoran.com to Cloudflare** — DNS is
+  already managed there; the registrar (still Dreamhost) hasn't moved yet.
+
+- **Turn off GitHub Pages for the repo** — the deploy workflow is deleted, but
+  `jakecor.github.io/blog/` still serves the last build. Disable Pages in the
+  repo settings to retire it properly. Low urgency: it serves a canonical
+  pointing at jacobcorcoran.com, so it is stale, not harmful.
+
+- **Redirect www → apex** — both are live CNAMEs to the same Pages project with
+  no redirect. *Lower priority than it looks:* both already serve
+  `<link rel="canonical" href="https://jacobcorcoran.com/">`, so search engines
+  are being told the right thing. This is tidiness, not an SEO leak. A
+  Cloudflare bulk redirect rule does it.
+
+- ~~**Remove the redundant GitHub Pages deploy workflow**~~ — done 2026-09-15;
+  `.github/workflows/deploy.yml` deleted. Cloudflare Pages is now the only
+  deploy path.
+
+- ~~**301 redirect mapping for old URLs**~~ — done 2026-09-15. `src/_redirects`
+  maps 35 old WordPress paths onto the new structure. Old URLs were recovered
+  from the Internet Archive CDX index and confirmed to have returned 200.
+
+## Content recovered from the old site (decide what to do)
+
+Found while building the redirect map. Both currently redirect to a stand-in;
+retarget the rule in `src/_redirects` if either is restored.
+
+- **`/presentations/`** — a real page listing speaking/webinar topics
+  (copywriting, digital marketing, paid search, SEO, analytics, funnel
+  development). Has no equivalent on the new site. Currently redirects to
+  `/about/`. Plausibly worth rebuilding if you still take speaking work.
+- **`/name-future/`** — "What My Name Means For My Future", an old just-for-fun
+  post (category `just-for-fun`, tags funny/future/teletubbies) with reader
+  comments. Tonally a long way from the current positioning; currently
+  redirects to the homepage. Restore only if you want it.
 
 ## Lower priority / optional
 
@@ -59,6 +104,21 @@ All verified against a real `npm run build` and the resulting `_site/` output.
 - **Add a privacy page** — pairs with the analytics addition above; explain what (little) is collected.
 - **Reader comments** via giscus (GitHub Discussions-backed, free, fits a static site) if reader engagement is wanted.
 - **Categories/tags** — the old site had them (Marketing, Writing, Secret Powers), but premature until there's more content.
+
+## Gaps found in review (2026-09-15), not previously tracked
+
+- **No `og:image` anywhere** — every share on LinkedIn/X renders as a bare text
+  card, and `twitter:card` falls back to `summary` rather than
+  `summary_large_image`. A single default image referenced from
+  `src/_data/site.js` would fix this site-wide, with per-post `image:`
+  frontmatter already supported as an override. Highest-visibility gap on the
+  site given the subject matter.
+- **No skip-to-content link** — cheapest real accessibility win available; a few
+  lines in `base.njk` plus a focus style, letting keyboard users past the nav.
+- **No `_headers` file** — Cloudflare supplies `x-content-type-options: nosniff`
+  and `referrer-policy: strict-origin-when-cross-origin` by default, but there
+  is no HSTS and no CSP. A `_headers` file is free-tier and local, and would
+  also let CSS cache longer than the current `max-age=14400`.
 
 ## Other ideas
 

@@ -14,6 +14,10 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("src/images/**/*.{jpg,jpeg,png,gif,svg,webp,avif}");
   eleventyConfig.addPassthroughCopy("src/favicon.svg");
 
+  // Cloudflare Pages reads _redirects from the site root. It has no effect
+  // locally or on the GitHub Pages mirror — only Pages acts on it.
+  eleventyConfig.addPassthroughCopy({ "src/_redirects": "_redirects" });
+
   // "posts" collection: every non-draft Markdown file under src/posts/,
   // newest first. Powers the post listing on the homepage and any future
   // pagination.
