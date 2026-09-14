@@ -9,9 +9,10 @@ Ideas and future work for this blog, not yet scheduled.
 - **Favicon and custom 404 page** — currently no favicon, and a broken link falls through to GitHub's generic 404 instead of something on-brand.
 - **robots.txt + sitemap.xml for the new site** — foundational for the SEO review below, cheap to add now.
 
-## Worth doing before the DNS cutover
+## DNS / domain
 
-- **301 redirect mapping for old URLs** — the old site's post slugs don't all match the new ones (e.g. `the-top-3-strategies-for-...` vs `top-3-strategies-digital-economy`). If jacobcorcoran.com ever points here, any inbound links/search rankings to the old URLs would 404 without redirects.
+- **Move domain registration for jacobcorcoran.com to Cloudflare** — DNS is already managed there; the registrar itself hasn't moved yet.
+- **301 redirect mapping for old URLs** — the old site's post slugs don't all match the new ones (e.g. `the-top-3-strategies-for-...` vs `top-3-strategies-digital-economy`). Any inbound links/search rankings to the old URLs would 404 without redirects.
 
 ## Lower priority / optional
 
@@ -22,6 +23,6 @@ Ideas and future work for this blog, not yet scheduled.
 ## Other ideas
 
 - **Linktree-style bio link page** — a template for a single page of social/bio links (for sharing from Instagram/X bio, etc.), separate from the main blog layout.
-- **Nav link to tools subdomain** — add a link in the site header nav pointing to the tools subdomain, once it exists.
+- **Nav link to tools subdomain** — add a link in the site header nav pointing to tools.jacobcorcoran.com.
 - **Homepage pagination strategy** — decide how the frontpage post listing behaves once the number of posts grows large enough that a single unpaginated page is too long (e.g. paginate, or cap to N most recent with a link to an archive).
 - **SEO review** — audit meta tags, sitemap, structured data, and general on-page SEO once there's more real content to review against.
