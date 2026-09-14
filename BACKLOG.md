@@ -6,12 +6,12 @@ Ideas and future work for this blog, not yet scheduled.
 
 - **About page "contact" link is dead** — `src/about.md` links to `jacobcorcoran.com/contact/`, which was the old Dreamhost/WordPress site's contact page. That domain now points at this blog (Cloudflare Pages), which has no `/contact/` route, so the link 404s on the live site. Cloudflare Email Routing now forwards a `hello@` alias — a `mailto:` link is one option. Not fixed automatically since it's in a file the user hand-edits.
 
-## Quick, high-value wins
+## Quick, high-value wins — done (2026-09-15)
 
-- **RSS/Atom feed** — official `@11ty/eleventy-plugin-rss` plugin; lets people actually subscribe.
-- **Open Graph / Twitter card meta tags (+ canonical link)** — per-page title/description/image so links look good when shared on LinkedIn/X; canonical tags matter now since both `jacobcorcoran.com` and `www.jacobcorcoran.com` serve the same content with no redirect between them.
-- **Favicon and custom 404 page** — currently no favicon, and a broken link falls through to Cloudflare Pages' generic 404 instead of something on-brand.
-- **robots.txt + sitemap.xml for the new site** — foundational for the SEO review below, cheap to add now.
+- ~~RSS/Atom feed~~ — `feed.xml` via the official `@11ty/eleventy-plugin-rss` plugin.
+- ~~Open Graph / Twitter card meta tags (+ canonical link)~~ — per-page canonical, description, and OG/Twitter tags in `base.njk`, keyed off `src/_data/site.js`.
+- ~~Favicon and custom 404 page~~ — `favicon.svg` (simple JC monogram) and `404.md` at the literal `/404.html` path.
+- ~~robots.txt + sitemap.xml~~ — both generated from the same site data, sitemap covers every real page.
 
 ## DNS / domain
 
