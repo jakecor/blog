@@ -23,7 +23,8 @@ Ideas and future work for this blog, not yet scheduled.
 
 ## Lower priority / optional
 
-- **Lightweight privacy-friendly analytics** if we want to know whether anyone's reading — see the proposal doc once written up.
+- **Add Cloudflare Web Analytics** — cookieless, free, same vendor as DNS/Pages already in use. Either a dashboard toggle (zero code) or a one-line snippet in `base.njk`.
+- **Add a privacy page** — pairs with the analytics addition above; explain what (little) is collected.
 - **Reader comments** via giscus (GitHub Discussions-backed, free, fits a static site) if reader engagement is wanted.
 - **Categories/tags** — the old site had them (Marketing, Writing, Secret Powers), but premature until there's more content.
 
