@@ -1,3 +1,10 @@
+> **HISTORICAL — do not act on this file.**
+> This was the original kickoff brief (2026-08-14). Much of it is now out of
+> date: `npm init`, the GitHub remote, the site structure, templates, content and
+> deployment are all done, and deployment is no longer "out of scope".
+> **`CLAUDE.md` is the current source of truth.** Keep this only as a record of
+> the original intent and working style.
+
 # Blog Project — Claude Code Brief
 
 Drop this file in `C:\Dev\projects\blog` as `CLAUDE.md` (Claude Code reads that filename automatically for project context), or paste it as your first message in a Claude Code session started in that folder.

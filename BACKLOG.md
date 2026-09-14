@@ -4,7 +4,39 @@ Ideas and future work for this blog, not yet scheduled.
 
 ## Bugs / broken right now
 
-- **About page "contact" link is dead** — `src/about.md` links to `jacobcorcoran.com/contact/`, which was the old Dreamhost/WordPress site's contact page. That domain now points at this blog (Cloudflare Pages), which has no `/contact/` route, so the link 404s on the live site. Cloudflare Email Routing now forwards a `hello@` alias — a `mailto:` link is one option. Not fixed automatically since it's in a file the user hand-edits.
+- _Nothing known._ (The previously listed dead `/contact/` link on the about page
+  was already fixed on 2026-08-30 in commit `88d7c91` — `src/about.md` now links
+  to LinkedIn, and no `/contact/` link exists anywhere in `src/`. The entry was
+  filed in error on 2026-09-15; verify against the file before re-adding it.)
+
+## Found in code review (2026-09-15) — not yet fixed
+
+Verified against a real `npm run build` and the resulting `_site/` output.
+
+- **Post meta descriptions repeat the title and date.** `base.njk` builds its
+  fallback description from `content`, which at that point is `post.njk`'s output
+  — including the `<h1>` and the `.post-meta` date line. So a post's
+  `<meta name="description">` burns ~90 of its 160 characters restating the title
+  before reaching any actual prose. `index.njk` gets this right by using
+  `post.templateContent`. Fix by adding explicit `description:` frontmatter to the
+  three posts and falling back to `site.description`.
+- **The 404 page is self-canonicalising and indexable.** `/404.html` emits
+  `<link rel="canonical" href="https://jacobcorcoran.com/404.html">` and no
+  `noindex`, inviting search engines to index it as a real page.
+- **Developer comments ship above `<!DOCTYPE html>`.** The two comment blocks at
+  the top of `base.njk` use HTML syntax, so they render into every page's source
+  ahead of the doctype. Switching them to Nunjucks `{# … #}` keeps them build-time
+  only.
+- **`npm run deploy` prints the wrong live URL.** `scripts/deploy.mjs` line 28 sets
+  `SITE = 'https://jakecor.github.io/blog/'` and echoes it three times on success.
+  Should be `https://jacobcorcoran.com/`.
+- **`og:title` duplicates `og:site_name`.** Both carry "Jacob Corcoran", so social
+  cards read "Title | Jacob Corcoran" underneath "Jacob Corcoran".
+- **`404.md` hardcodes `/`** for its homepage link instead of using `| url`, so it
+  breaks under the `--pathprefix=/blog/` mirror build.
+- **Unverified Twitter handle.** `base.njk` hardcodes `twitter:site` as
+  `@jacobcorcoran`; confirm that account exists before relying on it.
+- **`src/images/.gitkeep` is copied into `_site/`.** Harmless, but it is published.
 
 ## Quick, high-value wins — done (2026-09-15)
 
@@ -23,7 +55,7 @@ Ideas and future work for this blog, not yet scheduled.
 
 ## Lower priority / optional
 
-- **Add Cloudflare Web Analytics** — cookieless, free, same vendor as DNS/Pages already in use. Either a dashboard toggle (zero code) or a one-line snippet in `base.njk`.
+- **Add Cloudflare Web Analytics** — cookieless, free, same vendor as DNS/Pages already in use. Either a dashboard toggle (zero code) or a one-line snippet in `base.njk`. **Note the tension:** the site currently ships zero client-side JavaScript and `style.css` states that as a design goal, so either option adds the first `<script>` to the site. Decide that explicitly before implementing.
 - **Add a privacy page** — pairs with the analytics addition above; explain what (little) is collected.
 - **Reader comments** via giscus (GitHub Discussions-backed, free, fits a static site) if reader engagement is wanted.
 - **Categories/tags** — the old site had them (Marketing, Writing, Secret Powers), but premature until there's more content.
