@@ -39,14 +39,20 @@ const red = (s) => `[31m${s}[0m`;
 const green = (s) => `[32m${s}[0m`;
 const amber = (s) => `[33m${s}[0m`;
 
+// No shell, anywhere. On Windows `shell: true` concatenates arguments rather
+// than escaping them (Node DEP0190), so a commit message containing a quote
+// or an & would be mangled before git ever saw it — and the message is the
+// one argument here that is genuinely arbitrary text.
+//
+// The usual reason people reach for the shell on Windows is that npx and npm
+// are .cmd shims, which Node refuses to spawn directly. Nothing here needs
+// them: git, gh and node are all real executables, and Eleventy's bin is a
+// plain .cjs that node can run itself. So the shell never enters into it.
 function run(cmd, args, opts = {}) {
-  return spawnSync(cmd, args, {
-    cwd: ROOT,
-    encoding: 'utf8',
-    shell: process.platform === 'win32',
-    ...opts,
-  });
+  return spawnSync(cmd, args, { cwd: ROOT, encoding: 'utf8', ...opts });
 }
+
+const ELEVENTY = join(ROOT, 'node_modules', '@11ty', 'eleventy', 'cmd.cjs');
 
 function git(...args) {
   const r = run('git', args);
@@ -82,8 +88,12 @@ if (branch !== 'main') {
 /* ------------------------------------------------------------------ *
  * 2. Build before anything leaves the machine
  * ------------------------------------------------------------------ */
+if (!existsSync(ELEVENTY)) {
+  die('Eleventy is not installed here.', 'Run: npm ci');
+}
+
 console.log(bold('\nBuilding…'));
-const build = run('npx', ['@11ty/eleventy'], { stdio: 'pipe' });
+const build = run(process.execPath, [ELEVENTY], { stdio: 'pipe' });
 if (build.status !== 0) {
   die(
     'Build failed — nothing pushed.',
