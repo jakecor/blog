@@ -3,13 +3,44 @@
   frontmatter and Eleventy wraps its rendered content in this shell.
   Keeps header/nav/footer in one place instead of repeated per page.
 -->
+<!--
+  Canonical URL, description, and Open Graph/Twitter tags all key off
+  `site.url` (src/_data/site.js) rather than the pathPrefix-aware `url`
+  filter, since jacobcorcoran.com is the one true canonical location
+  regardless of which build target (Cloudflare Pages at root, or the
+  legacy GitHub Pages mirror under /blog/) happens to render a page.
+  `description` and `image` are optional frontmatter overrides; without
+  them this falls back to an auto-excerpt of the rendered content, or
+  no image at all.
+-->
+{% set metaDescription = description or (content | excerpt) %}
+{% set metaTitle = title + " | " + site.name %}
+{% set ogType = ogType or "website" %}
+{% set canonicalUrl = site.url + page.url %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ title }} | Jacob Corcoran</title>
+  <title>{{ metaTitle }}</title>
+  <meta name="description" content="{{ metaDescription }}">
+  <link rel="canonical" href="{{ canonicalUrl }}">
   <link rel="stylesheet" href="{{ '/css/style.css' | url }}">
+  <link rel="icon" href="{{ '/favicon.svg' | url }}" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title="{{ site.name }}" href="{{ site.url }}/feed.xml">
+
+  <meta property="og:type" content="{{ ogType }}">
+  <meta property="og:title" content="{{ metaTitle }}">
+  <meta property="og:description" content="{{ metaDescription }}">
+  <meta property="og:url" content="{{ canonicalUrl }}">
+  <meta property="og:site_name" content="{{ site.name }}">
+  {% if image %}<meta property="og:image" content="{{ site.url }}{{ image | url }}">{% endif %}
+
+  <meta name="twitter:card" content="{{ 'summary_large_image' if image else 'summary' }}">
+  <meta name="twitter:title" content="{{ metaTitle }}">
+  <meta name="twitter:description" content="{{ metaDescription }}">
+  <meta name="twitter:site" content="@jacobcorcoran">
+  {% if image %}<meta name="twitter:image" content="{{ site.url }}{{ image | url }}">{% endif %}
 </head>
 <body>
   <header class="site-header">

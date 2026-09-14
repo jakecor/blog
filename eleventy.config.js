@@ -2,10 +2,15 @@
 // Tells Eleventy where source content lives, which folders to copy
 // through untouched (e.g. CSS), and defines the "posts" collection
 // used by src/index.njk to list and link to blog posts.
+const { default: pluginRss } = require("@11ty/eleventy-plugin-rss");
+
 module.exports = function (eleventyConfig) {
+  eleventyConfig.addPlugin(pluginRss);
+
   // Copy static assets as-is into the output site (no processing needed).
   eleventyConfig.addPassthroughCopy("src/css");
   eleventyConfig.addPassthroughCopy("src/images");
+  eleventyConfig.addPassthroughCopy("src/favicon.svg");
 
   // "posts" collection: every non-draft Markdown file under src/posts/,
   // newest first. Powers the post listing on the homepage and any future
@@ -19,9 +24,12 @@ module.exports = function (eleventyConfig) {
 
   // `draft: true` in a post's frontmatter keeps it out of collections and
   // stops Eleventy writing an output file for it at all, so the content
-  // lives in the repo without going live.
+  // lives in the repo without going live. `|| data.eleventyExcludeFromCollections`
+  // preserves that flag when a template (feed.njk, sitemap.njk, 404.md, ...)
+  // sets it directly in its own frontmatter instead of via `draft`.
   eleventyConfig.addGlobalData("eleventyComputed", {
-    eleventyExcludeFromCollections: (data) => data.draft === true,
+    eleventyExcludeFromCollections: (data) =>
+      data.draft === true || data.eleventyExcludeFromCollections === true,
     permalink: (data) => (data.draft ? false : data.permalink),
   });
 
