@@ -9,34 +9,34 @@ Ideas and future work for this blog, not yet scheduled.
   to LinkedIn, and no `/contact/` link exists anywhere in `src/`. The entry was
   filed in error on 2026-09-15; verify against the file before re-adding it.)
 
-## Found in code review (2026-09-15) — not yet fixed
+## Found in code review (2026-09-15) — fixed same day
 
-Verified against a real `npm run build` and the resulting `_site/` output.
+All verified against a real `npm run build` and the resulting `_site/` output.
 
-- **Post meta descriptions repeat the title and date.** `base.njk` builds its
-  fallback description from `content`, which at that point is `post.njk`'s output
-  — including the `<h1>` and the `.post-meta` date line. So a post's
-  `<meta name="description">` burns ~90 of its 160 characters restating the title
-  before reaching any actual prose. `index.njk` gets this right by using
-  `post.templateContent`. Fix by adding explicit `description:` frontmatter to the
-  three posts and falling back to `site.description`.
-- **The 404 page is self-canonicalising and indexable.** `/404.html` emits
-  `<link rel="canonical" href="https://jacobcorcoran.com/404.html">` and no
-  `noindex`, inviting search engines to index it as a real page.
-- **Developer comments ship above `<!DOCTYPE html>`.** The two comment blocks at
-  the top of `base.njk` use HTML syntax, so they render into every page's source
-  ahead of the doctype. Switching them to Nunjucks `{# … #}` keeps them build-time
-  only.
-- **`npm run deploy` prints the wrong live URL.** `scripts/deploy.mjs` line 28 sets
-  `SITE = 'https://jakecor.github.io/blog/'` and echoes it three times on success.
-  Should be `https://jacobcorcoran.com/`.
-- **`og:title` duplicates `og:site_name`.** Both carry "Jacob Corcoran", so social
-  cards read "Title | Jacob Corcoran" underneath "Jacob Corcoran".
-- **`404.md` hardcodes `/`** for its homepage link instead of using `| url`, so it
-  breaks under the `--pathprefix=/blog/` mirror build.
-- **Unverified Twitter handle.** `base.njk` hardcodes `twitter:site` as
-  `@jacobcorcoran`; confirm that account exists before relying on it.
-- **`src/images/.gitkeep` is copied into `_site/`.** Harmless, but it is published.
+- ~~Post meta descriptions repeated the title and date~~ — `base.njk` built its
+  fallback from `content`, which is `post.njk`'s output including the `<h1>` and
+  `.post-meta` line, burning ~90 of 160 characters. The three posts now carry
+  explicit `description:` frontmatter, the `excerpt` filter strips post layout
+  chrome, and the chain falls back to `site.description` last.
+- ~~The excerpt filter double-escaped HTML entities~~ — rendered `&amp;` passed
+  through Nunjucks autoescape became `&amp;amp;`. Entities are decoded before
+  truncation now, so autoescape encodes exactly once.
+- ~~The 404 page was self-canonicalising and indexable~~ — `404.md` sets
+  `noindex: true`, and `base.njk` emits `<meta name="robots" content="noindex">`
+  instead of a canonical link when it is set.
+- ~~Developer comments shipped above `<!DOCTYPE html>`~~ — `base.njk`'s header
+  block is a Nunjucks comment now, and the `{%- set -%}` tags use whitespace
+  control, so the doctype is line 1 on every page.
+- ~~`npm run deploy` printed the wrong live URL~~ — `scripts/deploy.mjs` said
+  `jakecor.github.io/blog/`; now `https://jacobcorcoran.com/`.
+- ~~`og:title` duplicated `og:site_name`~~ — social titles drop the site name;
+  `<title>` keeps it.
+- ~~`404.md` hardcoded `/`~~ — uses the prefix-aware `| url` filter.
+- ~~Unverified Twitter handle hardcoded in the layout~~ — moved to
+  `site.twitterHandle`, and the tag is omitted entirely when it is unset.
+  **Still worth confirming `@jacobcorcoran` is a real account.**
+- ~~`src/images/.gitkeep` was published~~ — the passthrough copy is scoped to
+  real image extensions.
 
 ## Quick, high-value wins — done (2026-09-15)
 
@@ -55,7 +55,7 @@ Verified against a real `npm run build` and the resulting `_site/` output.
 
 ## Lower priority / optional
 
-- **Add Cloudflare Web Analytics** — cookieless, free, same vendor as DNS/Pages already in use. Either a dashboard toggle (zero code) or a one-line snippet in `base.njk`. **Note the tension:** the site currently ships zero client-side JavaScript and `style.css` states that as a design goal, so either option adds the first `<script>` to the site. Decide that explicitly before implementing.
+- **Add Cloudflare Web Analytics** — cookieless, free, same vendor as DNS/Pages already in use. Either a dashboard toggle (zero code) or a one-line snippet in `base.njk`. This would add the site's first `<script>`. That is allowed (see CLAUDE.md — JS has to earn its place, it isn't banned), but weigh it on the stated criteria: it is a third-party external request on every page load, which cuts against "prefer local over external", in exchange for cookieless analytics at no cost on the free tier. Cloudflare's server-side Pages metrics may already cover enough without any script at all — check that first.
 - **Add a privacy page** — pairs with the analytics addition above; explain what (little) is collected.
 - **Reader comments** via giscus (GitHub Discussions-backed, free, fits a static site) if reader engagement is wanted.
 - **Categories/tags** — the old site had them (Marketing, Writing, Secret Powers), but premature until there's more content.

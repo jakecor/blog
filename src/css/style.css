@@ -1,9 +1,12 @@
 /*
-  Base styling — minimal and lightweight by design: system font
-  stacks only (no web font downloads), no JS, no build step beyond
-  Eleventy itself. Light/dark palettes are both defined as custom
-  properties so prefers-color-scheme just swaps values, no separate
-  dark-mode rules to maintain.
+  Base styling — built for speed and readability rather than minimalism
+  for its own sake: system font stacks only (no web font downloads, no
+  third-party requests), and no build step beyond Eleventy itself. The
+  site happens to ship no JavaScript today because nothing has needed it,
+  not because JS is off-limits — see CLAUDE.md for the actual criteria.
+  Light/dark palettes are both defined as custom properties so
+  prefers-color-scheme just swaps values, no separate dark-mode rules to
+  maintain.
 
   Changes from the original version: added an --accent-color used
   deliberately (header rule, hover states) instead of relying on

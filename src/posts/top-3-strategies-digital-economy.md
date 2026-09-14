@@ -2,6 +2,7 @@
 title: The top 3 strategies for your business to survive and thrive in the new digital economy.
 date: 2014-09-02
 layout: post.njk
+description: Business has gone digital on a global scale. Three strategies to help your business survive, and thrive, in the new digital economy.
 ---
 Note: This was published on another website that is now defunct, so I’m putting it up here. I’ve left the original opening intact, which suited the original audience but is not to my current taste.
 

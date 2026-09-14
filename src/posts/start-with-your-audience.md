@@ -2,6 +2,7 @@
 title: If you start with your audience, the rest is easy.
 date: 2014-09-02
 layout: post.njk
+description: Three things to keep in mind when focusing on an audience — they make your writing land harder and your own job much easier.
 ---
 The more I work with clients, finish successful writing projects and run training webinars, the more I realise how important it is to start with your audience. Not only do you make a bigger impact, but you make your life much easier.
 

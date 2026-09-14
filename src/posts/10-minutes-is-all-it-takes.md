@@ -2,6 +2,7 @@
 title: 10 minutes is all it takes.
 date: 2016-05-15
 layout: post.njk
+description: Ten minutes of focused action is enough to get an amazing amount done. A simple fact that combats overwhelm and procrastination.
 ---
 Remembering one simple fact combats overwhelm and procrastination
 

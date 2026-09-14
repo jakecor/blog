@@ -25,7 +25,11 @@ import { createInterface } from 'node:readline/promises';
 import { stdin, stdout } from 'node:process';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const SITE = 'https://jakecor.github.io/blog/';
+// The live site. Cloudflare Pages (connected via Cloudflare's GitHub App)
+// builds from main and serves this at the domain root. The GitHub Pages
+// workflow still mirrors to jakecor.github.io/blog/ on the same push, but
+// that is a legacy copy nobody points at — don't report it as the result.
+const SITE = 'https://jacobcorcoran.com/';
 
 const argv = process.argv.slice(2);
 const DRY = argv.includes('--dry');

@@ -102,12 +102,28 @@ logic gets an inline comment. Match this when adding files.
 **Ask before adding dependencies.** Anything beyond Eleventy + the RSS plugin
 gets checked in first.
 
-**No client-side JavaScript.** The site currently ships **zero** `<script>` tags,
-and `src/css/style.css` states this as a design goal. This is a deliberate stance,
-not an accident — keep it unless the user decides otherwise. The one open
-question against it is the Cloudflare Web Analytics backlog item, which would add
-either a dashboard-injected snippet or one `<script>` in `base.njk`; that is the
-user's call to make explicitly, not something to slip in.
+**JavaScript is allowed, but it has to earn its place.** The site currently
+ships zero `<script>` tags. That is the *result* of the principles below, not a
+goal in itself — this is not minimalism for its own sake, and a genuine
+creature comfort with a real justification is welcome.
+
+The actual priorities, in order:
+
+1. **Speed.** Fast first render, no layout shift, no blocking requests.
+2. **User experience.** It should feel good to read on a phone on bad reception.
+3. **Standards compliance and accessibility.** Semantic HTML, keyboard
+   navigability, visible focus states, real alt text, sensible contrast.
+4. **Fits the Cloudflare free tier.** Static output, no server, no paid add-ons.
+   Anything requiring Workers/Functions/KV should be checked against free-tier
+   limits before it is built.
+5. **Prefer local over external.** Self-host assets rather than pulling from a
+   CDN or third party — fewer DNS lookups, no third-party tracking surface, no
+   outage you don't control. The site already does this for fonts (system stacks
+   only, zero downloads).
+
+So: ask whether a script measurably improves the reading experience, whether it
+can be local, whether it degrades gracefully without JS, and whether it costs
+anything on the free tier. If it passes, add it. If it's decoration, don't.
 
 **Canonical URL discipline.** `src/_data/site.js` holds the domain. The RSS feed,
 sitemap, robots.txt and every canonical/OG tag read from it. Never hardcode the
