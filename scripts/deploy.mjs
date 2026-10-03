@@ -69,11 +69,6 @@ function die(msg, detail) {
   process.exit(1);
 }
 
-function has(cmd) {
-  const probe = process.platform === 'win32' ? 'where' : 'which';
-  return run(probe, [cmd]).status === 0;
-}
-
 /* ------------------------------------------------------------------ *
  * 1. Sanity
  * ------------------------------------------------------------------ */
@@ -207,31 +202,65 @@ if (push.status !== 0) die('Push failed.', push.stderr);
 console.log(green('✓ ') + 'pushed');
 
 /* ------------------------------------------------------------------ *
- * 6. Follow the deploy, if gh is available
+ * 6. Wait for the change to actually appear on the live site
+ *
+ * This used to watch a GitHub Actions run. The site moved to Cloudflare
+ * Pages and .github/workflows was deleted, so `gh run list` started
+ * returning the LAST run from weeks earlier — already successful — and this
+ * script cheerfully reported "✓ Published" about a deploy that had nothing
+ * to do with the push. A success message that cannot fail is worse than no
+ * message, so it is gone.
+ *
+ * Cloudflare Pages has no equivalent to `gh run watch` without an API token,
+ * so verify the only thing that actually matters instead: ask the live site
+ * for the posts that are supposed to be there, and wait until it serves them.
  * ------------------------------------------------------------------ */
-if (!has('gh')) {
-  console.log(`\nGitHub Actions is building it now.`);
-  console.log(`Watch:  https://github.com/jakecor/blog/actions`);
-  console.log(`Live:   ${SITE}`);
-  process.exit(0);
+const WAIT_MS = 150000;
+const POLL_MS = 5000;
+
+function urlFor(slug) {
+  return SITE.replace(/\/$/, '') + '/posts/' + slug.replace(/\.md$/, '') + '/';
 }
 
-console.log(bold('\nWaiting for GitHub Actions…'));
-await new Promise((r) => setTimeout(r, 6000));
-const id = run('gh', ['run', 'list', '--limit', '1', '--json', 'databaseId',
-  '--jq', '.[0].databaseId']).stdout.trim();
-if (!id) {
-  console.log(dim('Could not find the run; check the Actions tab.'));
+async function status(url) {
+  try {
+    const res = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+    return res.status;
+  } catch {
+    return 0;
+  }
+}
+
+// Only the posts this push newly publishes can be checked for an appearance;
+// edits to an existing post change a page that already returns 200.
+const targets = newlyPublic.map((p) => ({ title: p.title, url: urlFor(p.name) }));
+
+if (!targets.length) {
+  console.log(`\nCloudflare Pages is building it now (usually under a minute).`);
   console.log(`Live: ${SITE}`);
   process.exit(0);
 }
 
-const watch = run('gh', ['run', 'watch', id, '--exit-status', '--interval', '5'],
-  { stdio: 'ignore' });
-if (watch.status !== 0) {
-  console.error(red('\n✗ The deploy failed.'));
-  console.error(`  gh run view ${id} --log-failed`);
-  console.error(dim('  The live site is untouched — Pages keeps serving the last good deploy.'));
+console.log(bold('\nWaiting for the new post(s) to go live…'));
+const deadline = Date.now() + WAIT_MS;
+const pending = new Map(targets.map((t) => [t.url, t.title]));
+
+while (pending.size && Date.now() < deadline) {
+  for (const [url, title] of [...pending]) {
+    if ((await status(url)) === 200) {
+      pending.delete(url);
+      console.log(green('✓ ') + title);
+      console.log(dim('  ' + url));
+    }
+  }
+  if (pending.size) await new Promise((r) => setTimeout(r, POLL_MS));
+}
+
+if (pending.size) {
+  console.log(amber('\n! Still not live after ' + Math.round(WAIT_MS / 1000) + 's:'));
+  for (const [url, title] of pending) console.log(`  ${title}\n  ${dim(url)}`);
+  console.log(dim('\nThe push succeeded. Either the build is slow or it failed —'));
+  console.log(dim('check https://dash.cloudflare.com → Pages → this project.'));
   process.exit(1);
 }
 

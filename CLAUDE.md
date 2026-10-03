@@ -65,6 +65,16 @@ test a rule you have to push and check the live site.
 will be public, prompts, then commits and pushes. Pushing *is* publishing, on
 both paths. Flags: `--dry`, `--yes`, `-m "msg"`.
 
+After pushing it **polls the live site** for any post this push newly
+publishes, waiting until each returns 200. That replaced watching a GitHub
+Actions run: once `.github/workflows/` was deleted, `gh run list` kept
+returning the last run from weeks earlier — already green — and the script
+reported "✓ Published" about a deploy unrelated to the push. A success message
+that cannot fail is worse than none. Cloudflare Pages has no `gh run watch`
+equivalent without an API token, so it verifies the only thing that actually
+matters: whether the page is there. An edit to an *existing* post has no new
+URL to wait on, so there it says the build is running and claims nothing more.
+
 ---
 
 ## Commands
