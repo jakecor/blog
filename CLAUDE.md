@@ -4,7 +4,7 @@ Project context for Claude Code. This file is the **current state of the world**
 `blog-project-brief.md` is the original kickoff brief and is now historical only —
 read it for intent, never for facts.
 
-Last verified: 2026-09-15.
+Last verified: 2026-11-10.
 
 ---
 
@@ -99,8 +99,12 @@ src/
   _data/currentYear.js footer copyright year
   _includes/base.njk   <html> shell: head/meta, header, nav, footer
   _includes/post.njk   post wrapper (title + date), chains to base.njk
+  _includes/timeline.njk  filterable timeline layout (see "Timeline and links pages")
+  _includes/links.njk  "link in bio" layout; sets `bare: true` to drop site chrome
   index.njk            homepage: bio + post listing
   about.md             /about/
+  career.md            /career/  timeline content — one file, one entry per "## "
+  links.md             /links/   link-in-bio content — headings + bullet lists
   404.md               -> /404.html
   feed.njk             -> /feed.xml    (RSS 2.0)
   sitemap.njk          -> /sitemap.xml
@@ -175,13 +179,47 @@ imageAlt: ...              # optional — falls back to title
 **Drafts.** `draft: true` does two things via `eleventyComputed` in
 `eleventy.config.js`: excludes the post from collections *and* sets
 `permalink: false` so no file is written at all. The draft lives in the repo and
-never reaches the live site.
+never reaches the live site. This applies to any page, not just posts.
+
+The one exception is the dev server: under `npm start` (`ELEVENTY_RUN_MODE ===
+"serve"`) a draft's page *is* written, so it can be previewed at its own URL.
+It still stays out of collections, so it is not on the local homepage, feed or
+sitemap. `npm run build` and the Cloudflare build never write drafts.
 
 **The exclusion flag is shared.** `feed.njk`, `sitemap.njk`, `robots.txt.njk` and
 `404.md` set `eleventyExcludeFromCollections: true` in their own frontmatter. The
 computed-data rule deliberately ORs that in (`data.draft === true || data.eleventyExcludeFromCollections === true`)
 rather than overwriting it — an earlier version overwrote it and silently leaked
 all four templates into the sitemap. Do not simplify that expression.
+
+---
+
+## Timeline and links pages
+
+Both are single Markdown files the author edits directly; the writing
+convention for each is documented in YAML comments at the top of the file
+(YAML comments, not HTML ones, so they never reach the output). All copy on
+both — including UI labels like the filter legend — comes from the file's
+body or frontmatter, per the authorship rule. Neither is linked from the site
+nav yet; `/links/` is not meant to be.
+
+**`src/career.md` → `/career/`.** Each `## heading` is an entry; the line under
+it is `date | type[, type] | where | figure`. The `timeline` filter in
+`eleventy.config.js` parses markdown-it's *HTML output* (split on `<h2>`),
+sorts by date, groups by year and throws on a malformed entry so a bad edit
+fails the build instead of publishing.
+
+The type filter is **CSS only**: real checkboxes plus `:has()` rules in
+`style.css`, keyed by type index (`#tl-f1` ↔ `.tl-t1`). Those rules are static,
+which is why there is a hard cap of 8 distinct types — the config filter
+enforces it. Raising the cap means adding a selector to each block in
+`style.css`, a `--tcN` colour, and bumping `TIMELINE_MAX_TYPES`. "Show all" is
+a `<button type="reset">`. Without `:has()` support everything simply stays
+visible.
+
+**`src/links.md` → `/links/`.** No parsing at all: plain headings and bullet
+lists, styled into cards by `.links` rules. `bare: true` (set by `links.njk`)
+makes `base.njk` omit the header, nav and footer.
 
 ---
 
