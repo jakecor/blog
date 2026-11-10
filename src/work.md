@@ -4,7 +4,7 @@
 #
 # EVERY WORD BELOW IS PLACEHOLDER. Replace all of it, then delete the
 # `draft: true` line to publish. While it is a draft the page exists only on
-# the local dev server (npm start -> http://localhost:8080/career/).
+# the local dev server (npm start -> http://localhost:8080/work/).
 #
 # HOW TO WRITE AN ENTRY
 #
@@ -31,13 +31,13 @@
 # Text above the first "##" heading is the page introduction.
 # A broken details line stops the build and names the entry at fault.
 #
-# To link straight to one entry from elsewhere, use /career/# followed by
-# its title in lowercase with hyphens, e.g. /career/#first-placeholder-achievement
+# To link straight to one entry from elsewhere, use /work/# followed by
+# its title in lowercase with hyphens, e.g. /work/#first-placeholder-achievement
 
 title: PLACEHOLDER page title
 description: PLACEHOLDER one-sentence description for search results and link previews.
 layout: timeline.njk
-permalink: /career/
+permalink: /work/
 draft: true
 
 order: newest               # or: oldest

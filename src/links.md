@@ -15,8 +15,8 @@
 #   - [Text](address)  one link card
 #   - [Text](address) A few words after the link become the card's small print
 #
-# Pages on this site use the path only:   [Text](/career/)   [Text](/posts/post-name/)
-# One achievement on the timeline:        [Text](/career/#entry-title-in-lowercase-with-hyphens)
+# Pages on this site use the path only:   [Text](/work/)   [Text](/posts/post-name/)
+# One achievement on the timeline:        [Text](/work/#entry-title-in-lowercase-with-hyphens)
 # Anything else needs the full address:   [Text](https://example.com/you)
 #
 # Reorder, add and remove freely; nothing else needs changing.
@@ -41,5 +41,5 @@ PLACEHOLDER one-line bio.
 
 ## Placeholder group two
 
-- [Placeholder timeline link](/career/) Placeholder small print
+- [Placeholder timeline link](/work/) Placeholder small print
 - [Placeholder article link](/posts/start-with-your-audience/)

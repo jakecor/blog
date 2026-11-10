@@ -103,7 +103,7 @@ module.exports = function (eleventyConfig) {
     return text.slice(0, 160).replace(/\s+\S*$/, "") + "…";
   });
 
-  // Turns the rendered Markdown of a timeline page (src/career.md) into
+  // Turns the rendered Markdown of a timeline page (src/work.md) into
   // structured data for _includes/timeline.njk. The Markdown convention is:
   //
   //   Intro paragraphs (anything before the first "## " heading).

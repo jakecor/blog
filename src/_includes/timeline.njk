@@ -2,12 +2,12 @@
 layout: base.njk
 ---
 {#
-  Timeline layout: turns one Markdown file (src/career.md) into a
+  Timeline layout: turns one Markdown file (src/work.md) into a
   chronological, filterable timeline. Chains to base.njk for the shell.
 
   The Markdown is parsed by the `timeline` filter in eleventy.config.js --
   the writing convention (## heading, then a "date | type | where | figure"
-  line) is documented there and at the top of src/career.md.
+  line) is documented there and at the top of src/work.md.
 
   Filtering uses no JavaScript. Each type is a real checkbox; style.css
   uses :has() to hide entries (and whole year groups) that match none of

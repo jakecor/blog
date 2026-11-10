@@ -268,7 +268,7 @@ article pre code {
 }
 
 /* ------------------------------------------------------------------
-   Timeline page (_includes/timeline.njk, content in src/career.md)
+   Timeline page (_includes/timeline.njk, content in src/work.md)
    ------------------------------------------------------------------ */
 
 /* One colour per achievement type, by position in the alphabetical type
@@ -312,7 +312,7 @@ article pre code {
    every year group; each ticked box then re-shows the entries carrying its
    type, and the year groups that contain one. The #id in the second set of
    rules is what lets them out-rank the first. Eight types are supported —
-   eleventy.config.js fails the build if career.md uses more, so adding a
+   eleventy.config.js fails the build if work.md uses more, so adding a
    ninth means adding a line to each block here and a ninth colour above. */
 .tl:has(.tl-f:checked) .tl-entry,
 .tl:has(.tl-f:checked) .tl-year {
@@ -489,7 +489,7 @@ article pre code {
   font-size: 1.3rem;
 }
 
-/* Arriving from a link to a specific entry (/career/#entry-id). */
+/* Arriving from a link to a specific entry (/work/#entry-id). */
 .tl-entry:target h3 {
   color: var(--accent-color);
 }

@@ -103,7 +103,7 @@ src/
   _includes/links.njk  "link in bio" layout; sets `bare: true` to drop site chrome
   index.njk            homepage: bio + post listing
   about.md             /about/
-  career.md            /career/  timeline content — one file, one entry per "## "
+  work.md              /work/    timeline content — one file, one entry per "## "
   links.md             /links/   link-in-bio content — headings + bullet lists
   404.md               -> /404.html
   feed.njk             -> /feed.xml    (RSS 2.0)
@@ -203,7 +203,7 @@ both — including UI labels like the filter legend — comes from the file's
 body or frontmatter, per the authorship rule. Neither is linked from the site
 nav yet; `/links/` is not meant to be.
 
-**`src/career.md` → `/career/`.** Each `## heading` is an entry; the line under
+**`src/work.md` → `/work/`.** Each `## heading` is an entry; the line under
 it is `date | type[, type] | where | figure`. The `timeline` filter in
 `eleventy.config.js` parses markdown-it's *HTML output* (split on `<h2>`),
 sorts by date, groups by year and throws on a malformed entry so a bad edit
