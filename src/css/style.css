@@ -266,3 +266,261 @@ article pre code {
 .social-links a:hover {
   color: var(--accent-color);
 }
+
+/* ------------------------------------------------------------------
+   Timeline page (_includes/timeline.njk, content in src/career.md)
+   ------------------------------------------------------------------ */
+
+/* One colour per achievement type, by position in the alphabetical type
+   list. Only ever used for dots and small swatches next to the type's
+   name — never as the sole carrier of meaning, and never as text colour,
+   so contrast of the copy does not depend on them. */
+:root {
+  --tc1: #b5502e;
+  --tc2: #1a56db;
+  --tc3: #2f7d4f;
+  --tc4: #8a4baf;
+  --tc5: #a66a12;
+  --tc6: #0e7c86;
+  --tc7: #c2366b;
+  --tc8: #5b6470;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tc1: #e08e6d;
+    --tc2: #7aa2f7;
+    --tc3: #6fcf97;
+    --tc4: #c39be0;
+    --tc5: #e3b341;
+    --tc6: #56c2cc;
+    --tc7: #f07fa8;
+    --tc8: #a3acb9;
+  }
+}
+
+.tl-c1 { --tc: var(--tc1); }
+.tl-c2 { --tc: var(--tc2); }
+.tl-c3 { --tc: var(--tc3); }
+.tl-c4 { --tc: var(--tc4); }
+.tl-c5 { --tc: var(--tc5); }
+.tl-c6 { --tc: var(--tc6); }
+.tl-c7 { --tc: var(--tc7); }
+.tl-c8 { --tc: var(--tc8); }
+
+/* The filter, with no JavaScript. Ticking any box hides every entry and
+   every year group; each ticked box then re-shows the entries carrying its
+   type, and the year groups that contain one. The #id in the second set of
+   rules is what lets them out-rank the first. Eight types are supported —
+   eleventy.config.js fails the build if career.md uses more, so adding a
+   ninth means adding a line to each block here and a ninth colour above. */
+.tl:has(.tl-f:checked) .tl-entry,
+.tl:has(.tl-f:checked) .tl-year {
+  display: none;
+}
+
+.tl:has(#tl-f1:checked) .tl-t1,
+.tl:has(#tl-f2:checked) .tl-t2,
+.tl:has(#tl-f3:checked) .tl-t3,
+.tl:has(#tl-f4:checked) .tl-t4,
+.tl:has(#tl-f5:checked) .tl-t5,
+.tl:has(#tl-f6:checked) .tl-t6,
+.tl:has(#tl-f7:checked) .tl-t7,
+.tl:has(#tl-f8:checked) .tl-t8,
+.tl:has(#tl-f1:checked) .tl-year:has(.tl-t1),
+.tl:has(#tl-f2:checked) .tl-year:has(.tl-t2),
+.tl:has(#tl-f3:checked) .tl-year:has(.tl-t3),
+.tl:has(#tl-f4:checked) .tl-year:has(.tl-t4),
+.tl:has(#tl-f5:checked) .tl-year:has(.tl-t5),
+.tl:has(#tl-f6:checked) .tl-year:has(.tl-t6),
+.tl:has(#tl-f7:checked) .tl-year:has(.tl-t7),
+.tl:has(#tl-f8:checked) .tl-year:has(.tl-t8) {
+  display: block;
+}
+
+.tl-filters {
+  margin: 2rem 0 2.5rem;
+}
+
+.tl-filters fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.tl-filters legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  color: var(--muted-color);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tl-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Hidden visually but still a real, focusable checkbox: keyboard and
+   screen-reader users operate the input, everyone else the label. */
+.tl-f {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.tl-chips label,
+.tl-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: none;
+  color: var(--text-color);
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.tl-chips label::before,
+.tl-type::before {
+  content: "";
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--tc);
+  flex-shrink: 0;
+}
+
+.tl-chips label:hover {
+  border-color: var(--text-color);
+}
+
+.tl-f:checked + label {
+  background: var(--text-color);
+  border-color: var(--text-color);
+  color: var(--bg-color);
+}
+
+.tl-f:focus-visible + label {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.tl-reset {
+  border-color: transparent;
+  color: var(--muted-color);
+  text-decoration: underline;
+}
+
+.tl-reset:hover {
+  color: var(--accent-color);
+}
+
+/* Nothing to reset until something is ticked. */
+.tl:not(:has(.tl-f:checked)) .tl-reset {
+  visibility: hidden;
+}
+
+.tl-year h2 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  color: var(--accent-color);
+}
+
+/* The vertical rule is the list's own left border; each entry's dot is
+   positioned back over it. */
+.tl-year ol {
+  list-style: none;
+  margin: 0 0 0 0.4rem;
+  padding: 0 0 0 1.5rem;
+  border-left: 2px solid var(--border-color);
+}
+
+.tl-entry {
+  position: relative;
+  padding-bottom: 2rem;
+  scroll-margin-top: 1rem;
+}
+
+.tl-entry::before {
+  content: "";
+  position: absolute;
+  top: 0.4rem;
+  left: calc(-1.5rem - 1px - 0.4rem);
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  background: var(--tc);
+  box-shadow: 0 0 0 3px var(--bg-color);
+}
+
+.tl-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.9rem;
+  margin: 0;
+  color: var(--muted-color);
+  font-size: 0.85rem;
+}
+
+.tl-when {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.tl-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tl-entry h3 {
+  margin: 0.15rem 0 0.5rem;
+  font-size: 1.3rem;
+}
+
+/* Arriving from a link to a specific entry (/career/#entry-id). */
+.tl-entry:target h3 {
+  color: var(--accent-color);
+}
+
+/* The optional headline figure: the "infographic" part. */
+.tl-stat {
+  margin: 0 0 0.5rem;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--tc);
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.tl-entry > p:not(.tl-meta):not(.tl-stat) {
+  margin: 0 0 0.5rem;
+}
+
+.tl-entry summary {
+  width: fit-content;
+  color: var(--link-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.tl-entry summary:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.tl-entry details > :last-child {
+  margin-bottom: 0;
+}

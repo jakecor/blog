@@ -103,6 +103,112 @@ module.exports = function (eleventyConfig) {
     return text.slice(0, 160).replace(/\s+\S*$/, "") + "…";
   });
 
+  // Turns the rendered Markdown of a timeline page (src/career.md) into
+  // structured data for _includes/timeline.njk. The Markdown convention is:
+  //
+  //   Intro paragraphs (anything before the first "## " heading).
+  //
+  //   ## Entry title
+  //   2019-03 | Type, Another type | Where | Optional headline figure
+  //
+  //   First paragraph: always shown.
+  //
+  //   Anything after it: tucked behind a <details> disclosure.
+  //
+  // It works on the HTML markdown-it has already produced (splitting on <h2>)
+  // rather than on the raw Markdown, so entry bodies can use any Markdown at
+  // all without this filter having to understand it.
+  //
+  // Returns { intro, types, years }:
+  //   types  [{ label, n }]  every distinct type, alphabetical; `n` (1-based)
+  //                          pairs with the #tl-f{n} / .tl-t{n} / .tl-c{n}
+  //                          rules in style.css, which is what makes the
+  //                          filter work with no JavaScript
+  //   years  [{ year, entries }]  entries grouped by year, sorted by date
+  //
+  // A malformed entry throws, failing the build (and so the deploy) with a
+  // message naming the entry, rather than publishing a half-broken timeline.
+  const TIMELINE_MAX_TYPES = 8; // number of filter rules written in style.css
+  const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+  eleventyConfig.addFilter("timeline", function (html, order) {
+    const slugify = eleventyConfig.getFilter("slugify");
+    const stripTags = (s) => s.replace(/<[^>]+>/g, "").trim();
+
+    const parts = String(html).split(/(?=<h2[\s>])/i);
+    const intro = /^<h2[\s>]/i.test(parts[0]) ? "" : parts.shift();
+
+    const entries = parts.map((part, index) => {
+      const m = part.match(/^<h2[^>]*>([\s\S]*?)<\/h2>\s*(?:<p>([\s\S]*?)<\/p>)?([\s\S]*)$/i);
+      const title = m[1].trim();
+      // The details line is the first LINE of the first paragraph. If the
+      // blank line after it was forgotten, the rest of that paragraph is
+      // body text, not details — hand it back.
+      const [metaLine, ...spill] = (m[2] || "").split("\n");
+      let body = (spill.length ? `<p>${spill.join("\n")}</p>` : "") + m[3];
+
+      const [when = "", typeField = "", where = "", stat = ""] = metaLine
+        .split("|")
+        .map((s) => s.trim());
+      const yearMatch = stripTags(when).match(/\d{4}/);
+      const typeLabels = stripTags(typeField).split(",").map((s) => s.trim()).filter(Boolean);
+      if (!yearMatch || !typeLabels.length) {
+        throw new Error(
+          `Timeline entry "${stripTags(title)}" needs a details line directly under its ` +
+            `heading, like:  2019-03 | Type | Where  (a date containing a year, then at least one type).`
+        );
+      }
+
+      // Sort key: year plus month, taken from "2019-03" or a month name
+      // ("March 2019"). A range ("2016–2019") sorts by its first year.
+      const year = Number(yearMatch[0]);
+      const numericMonth = when.match(/\d{4}-(\d{1,2})/);
+      const namedMonth = MONTHS.findIndex((mon) => new RegExp(`\\b${mon}`, "i").test(when));
+      const month = numericMonth ? Number(numericMonth[1]) : namedMonth + 1;
+
+      // First paragraph stays visible; the remainder goes behind <details>.
+      const split = body.match(/^\s*(<p>[\s\S]*?<\/p>)([\s\S]*)$/i);
+      const summary = split ? split[1] : "";
+      const more = (split ? split[2] : body).trim();
+
+      return {
+        id: slugify(stripTags(title)),
+        title, when, where, stat, summary, more,
+        typeLabels, year,
+        sortKey: year * 12 + month,
+        index,
+      };
+    });
+
+    const labels = [...new Set(entries.flatMap((e) => e.typeLabels.map((l) => l.toLowerCase())))].sort();
+    if (labels.length > TIMELINE_MAX_TYPES) {
+      throw new Error(
+        `The timeline has ${labels.length} distinct types (${labels.join(", ")}) but style.css ` +
+          `only has filter rules for ${TIMELINE_MAX_TYPES}. Merge some types, or add rules for more.`
+      );
+    }
+    const types = labels.map((key, i) => ({
+      n: i + 1,
+      // Display the spelling/capitalisation of the first entry that used it.
+      label: entries.flatMap((e) => e.typeLabels).find((l) => l.toLowerCase() === key),
+    }));
+    for (const entry of entries) {
+      entry.types = entry.typeLabels.map((l) => types[labels.indexOf(l.toLowerCase())]);
+    }
+
+    // Same-date entries keep the order they have in the file.
+    const direction = order === "oldest" ? 1 : -1;
+    entries.sort((a, b) => direction * (a.sortKey - b.sortKey) || a.index - b.index);
+
+    const years = [];
+    for (const entry of entries) {
+      const last = years[years.length - 1];
+      if (last && last.year === entry.year) last.entries.push(entry);
+      else years.push({ year: entry.year, entries: [entry] });
+    }
+
+    return { intro, types, years };
+  });
+
   return {
     dir: {
       input: "src",

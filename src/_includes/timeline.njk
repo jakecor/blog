@@ -1,0 +1,72 @@
+---
+layout: base.njk
+---
+{#
+  Timeline layout: turns one Markdown file (src/career.md) into a
+  chronological, filterable timeline. Chains to base.njk for the shell.
+
+  The Markdown is parsed by the `timeline` filter in eleventy.config.js --
+  the writing convention (## heading, then a "date | type | where | figure"
+  line) is documented there and at the top of src/career.md.
+
+  Filtering uses no JavaScript. Each type is a real checkbox; style.css
+  uses :has() to hide entries (and whole year groups) that match none of
+  the ticked boxes. "Show all" is a plain form reset button. In a browser
+  without :has() the boxes do nothing and every entry stays visible.
+
+  Frontmatter read here (all optional, all wording the page author's):
+    order        "newest" (default) or "oldest" first
+    filterLabel  legend above the filter chips
+    resetLabel   text of the button that clears the filter
+    moreLabel    text of the "read more" disclosure on long entries
+-#}
+{%- set tl = content | timeline(order) -%}
+<article class="tl">
+  <h1>{{ title }}</h1>
+  {{ tl.intro | safe }}
+
+  <form class="tl-filters">
+    <fieldset>
+      <legend>{{ filterLabel or "Filter" }}</legend>
+      <div class="tl-chips">
+        {%- for type in tl.types %}
+        <input class="tl-f" type="checkbox" id="tl-f{{ type.n }}">
+        <label class="tl-c{{ type.n }}" for="tl-f{{ type.n }}">{{ type.label }}</label>
+        {%- endfor %}
+        <button class="tl-reset" type="reset">{{ resetLabel or "Show all" }}</button>
+      </div>
+    </fieldset>
+  </form>
+
+  {% for group in tl.years -%}
+  <section class="tl-year">
+    <h2>{{ group.year }}</h2>
+    <ol>
+      {%- for entry in group.entries %}
+      <li class="tl-entry tl-c{{ entry.types[0].n }}{% for type in entry.types %} tl-t{{ type.n }}{% endfor %}" id="{{ entry.id }}">
+        <p class="tl-meta">
+          <span class="tl-when">{{ entry.when | safe }}</span>
+          {%- for type in entry.types %}
+          <span class="tl-type tl-c{{ type.n }}">{{ type.label }}</span>
+          {%- endfor %}
+          {%- if entry.where %}
+          <span class="tl-where">{{ entry.where | safe }}</span>
+          {%- endif %}
+        </p>
+        <h3>{{ entry.title | safe }}</h3>
+        {%- if entry.stat %}
+        <p class="tl-stat">{{ entry.stat | safe }}</p>
+        {%- endif %}
+        {{ entry.summary | safe }}
+        {%- if entry.more %}
+        <details>
+          <summary>{{ moreLabel or "More" }}</summary>
+          {{ entry.more | safe }}
+        </details>
+        {%- endif %}
+      </li>
+      {%- endfor %}
+    </ol>
+  </section>
+  {% endfor %}
+</article>
