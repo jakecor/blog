@@ -524,3 +524,97 @@ article pre code {
 .tl-entry details > :last-child {
   margin-bottom: 0;
 }
+
+/* ------------------------------------------------------------------
+   Links page (_includes/links.njk, content in src/links.md)
+   ------------------------------------------------------------------ */
+
+.links {
+  max-width: 28rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.links-avatar {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.links h1 {
+  margin: 0.5rem 0;
+}
+
+.links h2 {
+  margin: 2.25rem 0 0.75rem;
+  color: var(--muted-color);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Each bullet is a card. Any text written after the link becomes the
+   card's small print. */
+.links li {
+  position: relative;
+  margin-bottom: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--muted-color);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  transition: border-color 0.15s ease;
+}
+
+.links li:hover {
+  border-color: var(--accent-color);
+}
+
+.links li a {
+  display: block;
+  color: var(--text-color);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.links li:hover a {
+  color: var(--accent-color);
+}
+
+/* Stretch the link over the whole card so the entire card is the tap
+   target, while the link text alone stays its accessible name. */
+.links li a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.links li a:focus-visible {
+  outline: none;
+}
+
+.links li a:focus-visible::after {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+.links-home {
+  margin-top: 2.5rem;
+  font-size: 0.9rem;
+}
+
+.links-home a {
+  color: var(--muted-color);
+}

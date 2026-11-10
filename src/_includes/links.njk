@@ -1,0 +1,26 @@
+---
+layout: base.njk
+bare: true
+---
+{#
+  Links layout: a "link in bio" page (src/links.md) -- one narrow column
+  of large tap targets, meant to be opened from a social profile on a phone.
+  Chains to base.njk with `bare: true`, which drops the site header, nav
+  and footer so the links are the only thing on the page.
+
+  There is no parsing here. The Markdown is ordinary headings and bullet
+  lists; style.css (.links) turns every list item into a card whose whole
+  area is the link. So anything Markdown can express works, and the page
+  is still a plain, readable list of links with CSS switched off.
+
+  Optional frontmatter:
+    image / imageAlt  round avatar above the name (also the OG image)
+-#}
+<article class="links">
+  {% if image -%}
+  <img class="links-avatar" src="{{ image | url }}" alt="{{ imageAlt or title }}" width="96" height="96">
+  {%- endif %}
+  <h1>{{ title }}</h1>
+  {{ content | safe }}
+  <p class="links-home"><a href="{{ '/' | url }}">{{ site.url | replace("https://", "") }}</a></p>
+</article>

@@ -22,6 +22,7 @@
     image        absolute-from-root path; used for og:image + twitter:image
     ogType       defaults to "website"; post.njk sets "article"
     noindex      true to emit <meta name="robots" content="noindex">
+    bare         true to omit the site header, nav and footer (links.njk)
 -#}
 {%- set metaDescription = description or (content | excerpt) or site.description %}
 {%- set ogType = ogType or "website" %}
@@ -53,6 +54,7 @@
   {% if image %}<meta name="twitter:image" content="{{ site.url }}{{ image | url }}">{% endif %}
 </head>
 <body>
+  {% if not bare -%}
   <header class="site-header">
     <a class="site-title" href="{{ '/' | url }}">Jacob Corcoran</a>
     <nav>
@@ -60,11 +62,13 @@
       <a href="{{ '/about/' | url }}">About</a>
     </nav>
   </header>
+  {%- endif %}
 
   <main>
     {{ content | safe }}
   </main>
 
+  {% if not bare -%}
   <footer class="site-footer">
     <p>&copy; {{ currentYear }} Jacob Corcoran</p>
     <p class="social-links">
@@ -72,5 +76,6 @@
       <a href="https://x.com/jacobcorcoran">X (Twitter)</a>
     </p>
   </footer>
+  {%- endif %}
 </body>
 </html>
