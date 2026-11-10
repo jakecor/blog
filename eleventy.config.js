@@ -33,10 +33,18 @@ module.exports = function (eleventyConfig) {
   // lives in the repo without going live. `|| data.eleventyExcludeFromCollections`
   // preserves that flag when a template (feed.njk, sitemap.njk, 404.md, ...)
   // sets it directly in its own frontmatter instead of via `draft`.
+  //
+  // Exception: under the dev server (`npm start`) a draft's page IS written,
+  // so it can be previewed at its own URL while it is being worked on. It
+  // still stays out of collections, so it is not listed on the homepage, feed
+  // or sitemap even locally. `npm run build` and the Cloudflare build are not
+  // "serve" mode, so nothing changes for the live site.
+  const isDevServer = process.env.ELEVENTY_RUN_MODE === "serve";
   eleventyConfig.addGlobalData("eleventyComputed", {
     eleventyExcludeFromCollections: (data) =>
       data.draft === true || data.eleventyExcludeFromCollections === true,
-    permalink: (data) => (data.draft ? false : data.permalink),
+    permalink: (data) =>
+      data.draft && !isDevServer ? false : data.permalink,
   });
 
   // Human-readable date filter, e.g. {{ post.date | readableDate }} -> "May 15, 2016"
